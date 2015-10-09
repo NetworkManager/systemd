@@ -62,6 +62,7 @@
 #include "log.h"
 #include "loopback-setup.h"
 #include "machine-id-setup.h"
+#include "machine-secret-setup.h"
 #include "manager.h"
 #include "missing.h"
 #include "mount-setup.h"
@@ -1603,6 +1604,7 @@ int main(int argc, char *argv[]) {
 
                 hostname_setup();
                 machine_id_setup(NULL);
+                machine_secret_setup(NULL);
                 loopback_setup();
 
                 test_mtab();

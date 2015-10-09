@@ -1179,6 +1179,8 @@ libcore_la_SOURCES = \
 	src/core/kmod-setup.h \
 	src/core/loopback-setup.h \
 	src/core/loopback-setup.c \
+	src/core/machine-secret-setup.c \
+	src/core/machine-secret-setup.h \
 	src/core/namespace.c \
 	src/core/namespace.h \
 	src/core/killall.h \
