@@ -22,6 +22,7 @@ MANPAGES += \
 	man/locale.conf.5 \
 	man/localtime.5 \
 	man/machine-id.5 \
+	man/machine-secret.5 \
 	man/machine-info.5 \
 	man/os-release.5 \
 	man/sd-bus-errors.3 \
@@ -315,6 +316,7 @@ MANPAGES_ALIAS += \
 	man/sd_id128_equal.3 \
 	man/sd_id128_from_string.3 \
 	man/sd_id128_get_boot.3 \
+	man/sd_id128_get_machine_secret.3 \
 	man/sd_id128_t.3 \
 	man/sd_is_mq.3 \
 	man/sd_is_socket.3 \

@@ -149,6 +149,41 @@ _public_ int sd_id128_get_machine(sd_id128_t *ret) {
         return 0;
 }
 
+_public_ int sd_id128_get_machine_secret(sd_id128_t *ret) {
+        _cleanup_close_ int fd = -1;
+        char buf[33];
+        unsigned j;
+        sd_id128_t t;
+        int r;
+
+        assert_return(ret, -EINVAL);
+
+        fd = open("/etc/machine-secret", O_RDONLY|O_CLOEXEC|O_NOCTTY);
+        if (fd < 0)
+                return -errno;
+
+        r = loop_read_exact(fd, buf, 33, false);
+        if (r < 0)
+                return r;
+        if (buf[32] !='\n')
+                return -EIO;
+
+        for (j = 0; j < 16; j++) {
+                int a, b;
+
+                a = unhexchar(buf[j*2]);
+                b = unhexchar(buf[j*2+1]);
+
+                if (a < 0 || b < 0)
+                        return -EIO;
+
+                t.bytes[j] = a << 4 | b;
+        }
+
+        *ret = t;
+        return 0;
+}
+
 _public_ int sd_id128_get_boot(sd_id128_t *ret) {
         static thread_local sd_id128_t saved_boot_id;
         static thread_local bool saved_boot_id_valid = false;
