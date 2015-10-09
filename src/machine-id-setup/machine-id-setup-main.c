@@ -26,6 +26,7 @@
 
 #include "log.h"
 #include "machine-id-setup.h"
+#include "machine-secret-setup.h"
 #include "util.h"
 
 static const char *arg_root = NULL;
@@ -33,7 +34,7 @@ static bool arg_commit = false;
 
 static void help(void) {
         printf("%s [OPTIONS...]\n\n"
-               "Initialize /etc/machine-id from a random source.\n\n"
+               "Initialize /etc/machine-id and /etc/machine-secret from a random source.\n\n"
                "  -h --help             Show this help\n"
                "     --version          Show package version\n"
                "     --root=ROOT        Filesystem root\n"
@@ -106,11 +107,13 @@ int main(int argc, char *argv[]) {
         if (r <= 0)
                 return r < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 
-        if (arg_commit)
+        if (arg_commit) {
                 r = machine_id_commit(arg_root);
-        else
+        } else {
                 r = machine_id_setup(arg_root);
-
+                if (r == 0)
+                        r = machine_secret_setup(arg_root);
+        }
 
         return r < 0 ? EXIT_FAILURE : EXIT_SUCCESS;
 }

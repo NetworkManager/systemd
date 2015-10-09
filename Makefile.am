@@ -2338,7 +2338,9 @@ EXTRA_DIST += \
 systemd_machine_id_setup_SOURCES = \
 	src/machine-id-setup/machine-id-setup-main.c \
 	src/core/machine-id-setup.c \
-	src/core/machine-id-setup.h
+	src/core/machine-id-setup.h \
+	src/core/machine-secret-setup.c \
+	src/core/machine-secret-setup.h
 
 systemd_machine_id_setup_LDADD = \
 	libshared.la
