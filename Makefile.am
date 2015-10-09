@@ -2313,7 +2313,9 @@ endif
 # ------------------------------------------------------------------------------
 if ENABLE_FIRSTBOOT
 systemd_firstboot_SOURCES = \
-	src/firstboot/firstboot.c
+	src/firstboot/firstboot.c \
+	src/core/machine-secret-setup.c \
+	src/core/machine-secret-setup.h
 
 systemd_firstboot_LDADD = \
 	libshared.la \

@@ -35,6 +35,7 @@
 #include "strv.h"
 #include "terminal-util.h"
 #include "time-util.h"
+#include "machine-secret-setup.h"
 
 static char *arg_root = NULL;
 static char *arg_locale = NULL;  /* $LANG */
@@ -49,6 +50,7 @@ static bool arg_prompt_hostname = false;
 static bool arg_prompt_root_password = false;
 static bool arg_copy_locale = false;
 static bool arg_copy_timezone = false;
+static bool arg_setup_machine_secret = false;
 static bool arg_copy_root_password = false;
 
 static void clear_string(char *x) {
@@ -443,6 +445,20 @@ static int process_machine_id(void) {
         return 0;
 }
 
+static int process_machine_secret(void) {
+        int r;
+
+        if (!arg_setup_machine_secret)
+                return 0;
+
+        r = machine_secret_setup(arg_root);
+        if (r < 0)
+                return log_error_errno(r, "Failed to write machine secret: %m");
+
+        log_info("Machine secret written.");
+        return 0;
+}
+
 static int prompt_root_password(void) {
         const char *msg1, *msg2, *etc_shadow;
         int r;
@@ -636,6 +652,7 @@ static void help(void) {
                "     --copy-root-password      Copy root password from host\n"
                "     --copy                    Copy locale, timezone, root password\n"
                "     --setup-machine-id        Generate a new random machine ID\n"
+               "     --setup-machine-secret    Generate a new random machine secret\n"
                , program_invocation_short_name);
 }
 
@@ -661,6 +678,7 @@ static int parse_argv(int argc, char *argv[]) {
                 ARG_COPY_TIMEZONE,
                 ARG_COPY_ROOT_PASSWORD,
                 ARG_SETUP_MACHINE_ID,
+                ARG_SETUP_MACHINE_SECRET,
         };
 
         static const struct option options[] = {
@@ -684,6 +702,7 @@ static int parse_argv(int argc, char *argv[]) {
                 { "copy-timezone",        no_argument,       NULL, ARG_COPY_TIMEZONE        },
                 { "copy-root-password",   no_argument,       NULL, ARG_COPY_ROOT_PASSWORD   },
                 { "setup-machine-id",     no_argument,       NULL, ARG_SETUP_MACHINE_ID     },
+                { "setup-machine-secret", no_argument,       NULL, ARG_SETUP_MACHINE_SECRET },
                 {}
         };
 
@@ -832,6 +851,10 @@ static int parse_argv(int argc, char *argv[]) {
 
                         break;
 
+                case ARG_SETUP_MACHINE_SECRET:
+                        arg_setup_machine_secret = true;
+                        break;
+
                 case '?':
                         return -EINVAL;
 
@@ -868,6 +891,10 @@ int main(int argc, char *argv[]) {
                 goto finish;
 
         r = process_machine_id();
+        if (r < 0)
+                goto finish;
+
+        r = process_machine_secret();
         if (r < 0)
                 goto finish;
 
