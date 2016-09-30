@@ -111,7 +111,7 @@ DEFINE_STRING_TABLE_LOOKUP(dhcp6_message_status, int);
 
 static int client_start(sd_dhcp6_client *client, enum DHCP6State state);
 
-int sd_dhcp6_client_set_callback(
+_public_ int sd_dhcp6_client_set_callback(
                 sd_dhcp6_client *client,
                 sd_dhcp6_client_callback_t cb,
                 void *userdata) {
@@ -124,7 +124,7 @@ int sd_dhcp6_client_set_callback(
         return 0;
 }
 
-int sd_dhcp6_client_set_ifindex(sd_dhcp6_client *client, int ifindex) {
+_public_ int sd_dhcp6_client_set_ifindex(sd_dhcp6_client *client, int ifindex) {
 
         assert_return(client, -EINVAL);
         assert_return(ifindex >= -1, -EINVAL);
@@ -134,7 +134,7 @@ int sd_dhcp6_client_set_ifindex(sd_dhcp6_client *client, int ifindex) {
         return 0;
 }
 
-int sd_dhcp6_client_set_local_address(
+_public_ int sd_dhcp6_client_set_local_address(
                 sd_dhcp6_client *client,
                 const struct in6_addr *local_address) {
 
@@ -149,7 +149,7 @@ int sd_dhcp6_client_set_local_address(
         return 0;
 }
 
-int sd_dhcp6_client_set_mac(
+_public_ int sd_dhcp6_client_set_mac(
                 sd_dhcp6_client *client,
                 const uint8_t *addr, size_t addr_len,
                 uint16_t arp_type) {
@@ -191,7 +191,7 @@ static int client_ensure_duid(sd_dhcp6_client *client) {
  * without further modification. Otherwise, if duid_type is supported, DUID
  * is set based on that type. Otherwise, an error is returned.
  */
-int sd_dhcp6_client_set_duid(
+_public_ int sd_dhcp6_client_set_duid(
                 sd_dhcp6_client *client,
                 uint16_t duid_type,
                 const void *duid,
@@ -231,7 +231,7 @@ int sd_dhcp6_client_set_iaid(sd_dhcp6_client *client, uint32_t iaid) {
         return 0;
 }
 
-int sd_dhcp6_client_set_information_request(sd_dhcp6_client *client, int enabled) {
+_public_ int sd_dhcp6_client_set_information_request(sd_dhcp6_client *client, int enabled) {
         assert_return(client, -EINVAL);
         assert_return(IN_SET(client->state, DHCP6_STATE_STOPPED), -EBUSY);
 
@@ -249,7 +249,7 @@ int sd_dhcp6_client_get_information_request(sd_dhcp6_client *client, int *enable
         return 0;
 }
 
-int sd_dhcp6_client_set_request_option(sd_dhcp6_client *client, uint16_t option) {
+_public_ int sd_dhcp6_client_set_request_option(sd_dhcp6_client *client, uint16_t option) {
         size_t t;
 
         assert_return(client, -EINVAL);
@@ -280,7 +280,7 @@ int sd_dhcp6_client_set_request_option(sd_dhcp6_client *client, uint16_t option)
         return 0;
 }
 
-int sd_dhcp6_client_get_lease(sd_dhcp6_client *client, sd_dhcp6_lease **ret) {
+_public_ int sd_dhcp6_client_get_lease(sd_dhcp6_client *client, sd_dhcp6_lease **ret) {
         assert_return(client, -EINVAL);
 
         if (!client->lease)
@@ -1161,7 +1161,7 @@ static int client_start(sd_dhcp6_client *client, enum DHCP6State state) {
         return 0;
 }
 
-int sd_dhcp6_client_stop(sd_dhcp6_client *client) {
+_public_ int sd_dhcp6_client_stop(sd_dhcp6_client *client) {
         assert_return(client, -EINVAL);
 
         client_stop(client, SD_DHCP6_CLIENT_EVENT_STOP);
@@ -1175,7 +1175,7 @@ int sd_dhcp6_client_is_running(sd_dhcp6_client *client) {
         return client->state != DHCP6_STATE_STOPPED;
 }
 
-int sd_dhcp6_client_start(sd_dhcp6_client *client) {
+_public_ int sd_dhcp6_client_start(sd_dhcp6_client *client) {
         enum DHCP6State state = DHCP6_STATE_SOLICITATION;
         int r = 0;
 
@@ -1240,7 +1240,7 @@ error:
         return r;
 }
 
-int sd_dhcp6_client_attach_event(sd_dhcp6_client *client, sd_event *event, int64_t priority) {
+_public_ int sd_dhcp6_client_attach_event(sd_dhcp6_client *client, sd_event *event, int64_t priority) {
         int r;
 
         assert_return(client, -EINVAL);
@@ -1305,7 +1305,7 @@ sd_dhcp6_client *sd_dhcp6_client_unref(sd_dhcp6_client *client) {
         return NULL;
 }
 
-int sd_dhcp6_client_new(sd_dhcp6_client **ret) {
+_public_ int sd_dhcp6_client_new(sd_dhcp6_client **ret) {
         _cleanup_(sd_dhcp6_client_unrefp) sd_dhcp6_client *client = NULL;
         size_t t;
 

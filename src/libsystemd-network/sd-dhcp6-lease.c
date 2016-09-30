@@ -148,7 +148,7 @@ int dhcp6_lease_get_iaid(sd_dhcp6_lease *lease, be32_t *iaid) {
         return 0;
 }
 
-int sd_dhcp6_lease_get_address(sd_dhcp6_lease *lease, struct in6_addr *addr,
+_public_ int sd_dhcp6_lease_get_address(sd_dhcp6_lease *lease, struct in6_addr *addr,
                                uint32_t *lifetime_preferred,
                                uint32_t *lifetime_valid) {
         assert_return(lease, -EINVAL);
@@ -170,7 +170,7 @@ int sd_dhcp6_lease_get_address(sd_dhcp6_lease *lease, struct in6_addr *addr,
         return 0;
 }
 
-void sd_dhcp6_lease_reset_address_iter(sd_dhcp6_lease *lease) {
+_public_ void sd_dhcp6_lease_reset_address_iter(sd_dhcp6_lease *lease) {
         if (lease)
                 lease->addr_iter = lease->ia.addresses;
 }
@@ -199,7 +199,7 @@ int dhcp6_lease_set_dns(sd_dhcp6_lease *lease, uint8_t *optval, size_t optlen) {
         return 0;
 }
 
-int sd_dhcp6_lease_get_dns(sd_dhcp6_lease *lease, struct in6_addr **addrs) {
+_public_ int sd_dhcp6_lease_get_dns(sd_dhcp6_lease *lease, struct in6_addr **addrs) {
         assert_return(lease, -EINVAL);
         assert_return(addrs, -EINVAL);
 
@@ -233,7 +233,7 @@ int dhcp6_lease_set_domains(sd_dhcp6_lease *lease, uint8_t *optval,
         return r;
 }
 
-int sd_dhcp6_lease_get_domains(sd_dhcp6_lease *lease, char ***domains) {
+_public_ int sd_dhcp6_lease_get_domains(sd_dhcp6_lease *lease, char ***domains) {
         assert_return(lease, -EINVAL);
         assert_return(domains, -EINVAL);
 

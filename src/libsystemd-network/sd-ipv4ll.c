@@ -95,7 +95,7 @@ sd_ipv4ll *sd_ipv4ll_unref(sd_ipv4ll *ll) {
         return NULL;
 }
 
-int sd_ipv4ll_new(sd_ipv4ll **ret) {
+_public_ int sd_ipv4ll_new(sd_ipv4ll **ret) {
         _cleanup_(sd_ipv4ll_unrefp) sd_ipv4ll *ll = NULL;
         int r;
 
@@ -121,13 +121,13 @@ int sd_ipv4ll_new(sd_ipv4ll **ret) {
         return 0;
 }
 
-int sd_ipv4ll_stop(sd_ipv4ll *ll) {
+_public_ int sd_ipv4ll_stop(sd_ipv4ll *ll) {
         assert_return(ll, -EINVAL);
 
         return sd_ipv4acd_stop(ll->acd);
 }
 
-int sd_ipv4ll_set_ifindex(sd_ipv4ll *ll, int ifindex) {
+_public_ int sd_ipv4ll_set_ifindex(sd_ipv4ll *ll, int ifindex) {
         assert_return(ll, -EINVAL);
         assert_return(ifindex > 0, -EINVAL);
         assert_return(sd_ipv4ll_is_running(ll) == 0, -EBUSY);
@@ -135,7 +135,7 @@ int sd_ipv4ll_set_ifindex(sd_ipv4ll *ll, int ifindex) {
         return sd_ipv4acd_set_ifindex(ll->acd, ifindex);
 }
 
-int sd_ipv4ll_set_mac(sd_ipv4ll *ll, const struct ether_addr *addr) {
+_public_ int sd_ipv4ll_set_mac(sd_ipv4ll *ll, const struct ether_addr *addr) {
         int r;
 
         assert_return(ll, -EINVAL);
@@ -156,13 +156,13 @@ int sd_ipv4ll_detach_event(sd_ipv4ll *ll) {
         return sd_ipv4acd_detach_event(ll->acd);
 }
 
-int sd_ipv4ll_attach_event(sd_ipv4ll *ll, sd_event *event, int64_t priority) {
+_public_ int sd_ipv4ll_attach_event(sd_ipv4ll *ll, sd_event *event, int64_t priority) {
         assert_return(ll, -EINVAL);
 
         return sd_ipv4acd_attach_event(ll->acd, event, priority);
 }
 
-int sd_ipv4ll_set_callback(sd_ipv4ll *ll, sd_ipv4ll_callback_t cb, void *userdata) {
+_public_ int sd_ipv4ll_set_callback(sd_ipv4ll *ll, sd_ipv4ll_callback_t cb, void *userdata) {
         assert_return(ll, -EINVAL);
 
         ll->callback = cb;
@@ -171,7 +171,7 @@ int sd_ipv4ll_set_callback(sd_ipv4ll *ll, sd_ipv4ll_callback_t cb, void *userdat
         return 0;
 }
 
-int sd_ipv4ll_get_address(sd_ipv4ll *ll, struct in_addr *address) {
+_public_ int sd_ipv4ll_get_address(sd_ipv4ll *ll, struct in_addr *address) {
         assert_return(ll, -EINVAL);
         assert_return(address, -EINVAL);
 
@@ -252,7 +252,7 @@ static int ipv4ll_pick_address(sd_ipv4ll *ll) {
 
 #define MAC_HASH_KEY SD_ID128_MAKE(df,04,22,98,3f,ad,14,52,f9,87,2e,d1,9c,70,e2,f2)
 
-int sd_ipv4ll_start(sd_ipv4ll *ll) {
+_public_ int sd_ipv4ll_start(sd_ipv4ll *ll) {
         int r;
         bool picked_address = false;
 

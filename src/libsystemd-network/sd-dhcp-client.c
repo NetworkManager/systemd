@@ -127,7 +127,7 @@ static int client_receive_message_udp(
                 void *userdata);
 static void client_stop(sd_dhcp_client *client, int error);
 
-int sd_dhcp_client_set_callback(
+_public_ int sd_dhcp_client_set_callback(
                 sd_dhcp_client *client,
                 sd_dhcp_client_callback_t cb,
                 void *userdata) {
@@ -140,7 +140,7 @@ int sd_dhcp_client_set_callback(
         return 0;
 }
 
-int sd_dhcp_client_set_request_broadcast(sd_dhcp_client *client, int broadcast) {
+_public_ int sd_dhcp_client_set_request_broadcast(sd_dhcp_client *client, int broadcast) {
         assert_return(client, -EINVAL);
 
         client->request_broadcast = !!broadcast;
@@ -148,7 +148,7 @@ int sd_dhcp_client_set_request_broadcast(sd_dhcp_client *client, int broadcast) 
         return 0;
 }
 
-int sd_dhcp_client_set_request_option(sd_dhcp_client *client, uint8_t option) {
+_public_ int sd_dhcp_client_set_request_option(sd_dhcp_client *client, uint8_t option) {
         size_t i;
 
         assert_return(client, -EINVAL);
@@ -180,7 +180,7 @@ int sd_dhcp_client_set_request_option(sd_dhcp_client *client, uint8_t option) {
         return 0;
 }
 
-int sd_dhcp_client_set_request_address(
+_public_ int sd_dhcp_client_set_request_address(
                 sd_dhcp_client *client,
                 const struct in_addr *last_addr) {
 
@@ -195,7 +195,7 @@ int sd_dhcp_client_set_request_address(
         return 0;
 }
 
-int sd_dhcp_client_set_ifindex(sd_dhcp_client *client, int ifindex) {
+_public_ int sd_dhcp_client_set_ifindex(sd_dhcp_client *client, int ifindex) {
 
         assert_return(client, -EINVAL);
         assert_return(IN_SET(client->state, DHCP_STATE_INIT, DHCP_STATE_STOPPED), -EBUSY);
@@ -205,7 +205,7 @@ int sd_dhcp_client_set_ifindex(sd_dhcp_client *client, int ifindex) {
         return 0;
 }
 
-int sd_dhcp_client_set_mac(
+_public_ int sd_dhcp_client_set_mac(
                 sd_dhcp_client *client,
                 const uint8_t *addr,
                 size_t addr_len,
@@ -246,7 +246,7 @@ int sd_dhcp_client_set_mac(
         return 0;
 }
 
-int sd_dhcp_client_get_client_id(
+_public_ int sd_dhcp_client_get_client_id(
                 sd_dhcp_client *client,
                 uint8_t *type,
                 const uint8_t **data,
@@ -269,7 +269,7 @@ int sd_dhcp_client_get_client_id(
         return 0;
 }
 
-int sd_dhcp_client_set_client_id(
+_public_ int sd_dhcp_client_set_client_id(
                 sd_dhcp_client *client,
                 uint8_t type,
                 const uint8_t *data,
@@ -381,7 +381,7 @@ int sd_dhcp_client_set_iaid_duid(
         return 0;
 }
 
-int sd_dhcp_client_set_hostname(
+_public_ int sd_dhcp_client_set_hostname(
                 sd_dhcp_client *client,
                 const char *hostname) {
 
@@ -435,7 +435,7 @@ int sd_dhcp_client_set_mtu(sd_dhcp_client *client, uint32_t mtu) {
         return 0;
 }
 
-int sd_dhcp_client_get_lease(sd_dhcp_client *client, sd_dhcp_lease **ret) {
+_public_ int sd_dhcp_client_get_lease(sd_dhcp_client *client, sd_dhcp_lease **ret) {
         assert_return(client, -EINVAL);
 
         if (client->state != DHCP_STATE_BOUND &&
@@ -1775,7 +1775,7 @@ static int client_receive_message_raw(
         return client_handle_message(client, &packet->dhcp, len);
 }
 
-int sd_dhcp_client_start(sd_dhcp_client *client) {
+_public_ int sd_dhcp_client_start(sd_dhcp_client *client) {
         int r;
 
         assert_return(client, -EINVAL);
@@ -1794,7 +1794,7 @@ int sd_dhcp_client_start(sd_dhcp_client *client) {
         return r;
 }
 
-int sd_dhcp_client_stop(sd_dhcp_client *client) {
+_public_ int sd_dhcp_client_stop(sd_dhcp_client *client) {
         DHCP_CLIENT_DONT_DESTROY(client);
 
         assert_return(client, -EINVAL);
@@ -1805,7 +1805,7 @@ int sd_dhcp_client_stop(sd_dhcp_client *client) {
         return 0;
 }
 
-int sd_dhcp_client_attach_event(sd_dhcp_client *client, sd_event *event, int64_t priority) {
+_public_ int sd_dhcp_client_attach_event(sd_dhcp_client *client, sd_event *event, int64_t priority) {
         int r;
 
         assert_return(client, -EINVAL);
@@ -1878,7 +1878,7 @@ sd_dhcp_client *sd_dhcp_client_unref(sd_dhcp_client *client) {
         return NULL;
 }
 
-int sd_dhcp_client_new(sd_dhcp_client **ret) {
+_public_ int sd_dhcp_client_new(sd_dhcp_client **ret) {
         _cleanup_(sd_dhcp_client_unrefp) sd_dhcp_client *client = NULL;
 
         assert_return(ret, -EINVAL);
