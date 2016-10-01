@@ -46,6 +46,10 @@ LIBSYSTEMD_CURRENT=16
 LIBSYSTEMD_REVISION=0
 LIBSYSTEMD_AGE=16
 
+LIBSYSTEMD_NETWORK_CURRENT=0
+LIBSYSTEMD_NETWORK_REVISION=0
+LIBSYSTEMD_NETWORK_AGE=0
+
 # Dirs of external packages
 dbuspolicydir=@dbuspolicydir@
 dbussessionservicedir=@dbussessionservicedir@
@@ -1746,7 +1750,7 @@ test_dns_domain_SOURCES = \
 	src/test/test-dns-domain.c
 
 test_dns_domain_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 
@@ -3470,14 +3474,15 @@ busctl_LDADD = \
 	libsystemd-shared.la
 
 # ------------------------------------------------------------------------------
-noinst_LTLIBRARIES += \
-	libsystemd-network.la
 
-libsystemd_network_la_CFLAGS = \
+noinst_LTLIBRARIES += \
+	libsystemd-network-internal.la
+
+libsystemd_network_internal_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	$(KMOD_CFLAGS)
 
-libsystemd_network_la_SOURCES = \
+libsystemd_network_internal_la_SOURCES = \
 	src/systemd/sd-dhcp-client.h \
 	src/systemd/sd-dhcp-server.h \
 	src/systemd/sd-dhcp-lease.h \
@@ -3487,6 +3492,7 @@ libsystemd_network_la_SOURCES = \
 	src/systemd/sd-dhcp6-client.h \
 	src/systemd/sd-dhcp6-lease.h \
 	src/systemd/sd-lldp.h \
+	src/libsystemd-network/libsystemd-network.sym \
 	src/libsystemd-network/sd-dhcp-client.c \
 	src/libsystemd-network/sd-dhcp-server.c \
 	src/libsystemd-network/dhcp-network.c \
@@ -3525,7 +3531,7 @@ libsystemd_network_la_SOURCES = \
 	src/libsystemd-network/lldp-neighbor.c \
 	src/libsystemd-network/sd-lldp.c
 
-libsystemd_network_la_LIBADD = \
+libsystemd_network_internal_la_LIBADD = \
 	$(KMOD_LIBS)
 
 test_dhcp_option_SOURCES = \
@@ -3534,7 +3540,7 @@ test_dhcp_option_SOURCES = \
 	src/libsystemd-network/test-dhcp-option.c
 
 test_dhcp_option_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_dhcp_client_SOURCES = \
@@ -3544,14 +3550,14 @@ test_dhcp_client_SOURCES = \
 	src/libsystemd-network/test-dhcp-client.c
 
 test_dhcp_client_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_dhcp_server_SOURCES = \
 	src/libsystemd-network/test-dhcp-server.c
 
 test_dhcp_server_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_ipv4ll_SOURCES = \
@@ -3560,7 +3566,7 @@ test_ipv4ll_SOURCES = \
 	src/libsystemd-network/test-ipv4ll.c
 
 test_ipv4ll_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_ipv4ll_manual_SOURCES = \
@@ -3568,7 +3574,7 @@ test_ipv4ll_manual_SOURCES = \
 	src/libsystemd-network/test-ipv4ll-manual.c
 
 test_ipv4ll_manual_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_acd_SOURCES = \
@@ -3576,31 +3582,27 @@ test_acd_SOURCES = \
 	src/libsystemd-network/test-acd.c
 
 test_acd_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 test_ndisc_rs_SOURCES = \
 	src/systemd/sd-dhcp6-client.h \
 	src/systemd/sd-ndisc.h \
 	src/libsystemd-network/icmp6-util.h \
-	src/libsystemd-network/test-ndisc-rs.c \
-	src/libsystemd-network/dhcp-identifier.h \
-	src/libsystemd-network/dhcp-identifier.c
+	src/libsystemd-network/test-ndisc-rs.c
 
 test_ndisc_rs_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libudev.la \
 	libsystemd-shared.la
 
 test_dhcp6_client_SOURCES = \
 	src/systemd/sd-dhcp6-client.h \
 	src/libsystemd-network/dhcp6-internal.h \
-	src/libsystemd-network/test-dhcp6-client.c \
-	src/libsystemd-network/dhcp-identifier.h \
-	src/libsystemd-network/dhcp-identifier.c
+	src/libsystemd-network/test-dhcp6-client.c
 
 test_dhcp6_client_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libudev.la \
 	libsystemd-shared.la
 
@@ -3608,7 +3610,7 @@ test_lldp_SOURCES = \
 	src/libsystemd-network/test-lldp.c
 
 test_lldp_LDADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 tests += \
@@ -3619,6 +3621,36 @@ tests += \
 	test-ndisc-rs \
 	test-dhcp6-client \
 	test-lldp
+
+# ------------------------------------------------------------------------------
+rootlib_LTLIBRARIES += \
+	libsystemd-network.la
+
+pkginclude_HEADERS += \
+	src/systemd/sd-dhcp6-client.h \
+	src/systemd/sd-dhcp6-lease.h \
+	src/systemd/sd-dhcp-client.h \
+	src/systemd/sd-dhcp-lease.h \
+	src/systemd/sd-ipv4ll.h \
+	src/systemd/sd-lldp.h
+
+libsystemd_network_la_SOURCES = \
+	$(libsystemd_network_internal_la_SOURCES)
+
+libsystemd_network_la_LIBADD = \
+	libsystemd-shared.la \
+	$(KMOD_LIBS)
+
+libsystemd_network_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	-version-info $(LIBSYSTEMD_NETWORK_CURRENT):$(LIBSYSTEMD_NETWORK_REVISION):$(LIBSYSTEMD_NETWORK_AGE) \
+	-Wl,--version-script=$(top_srcdir)/src/libsystemd-network/libsystemd-network.sym
+
+pkgconfiglib_DATA += \
+	src/libsystemd-network/libsystemd-network.pc
+
+EXTRA_DIST += \
+	src/libsystemd-network/libsystemd-network.pc.in
 
 # ------------------------------------------------------------------------------
 include_HEADERS += \
@@ -3773,7 +3805,7 @@ libudev_core_la_CFLAGS = \
 	$(KMOD_CFLAGS)
 
 libudev_core_la_LIBADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libshared.la \
 	$(BLKID_LIBS) \
 	$(KMOD_LIBS)
@@ -5662,7 +5694,7 @@ nodist_libnetworkd_core_la_SOURCES = \
 	src/network/networkd-netdev-gperf.c
 
 libnetworkd_core_la_LIBADD = \
-	libsystemd-network.la \
+	libsystemd-network-internal.la \
 	libsystemd-shared.la
 
 rootlibexec_PROGRAMS += \
@@ -5691,7 +5723,7 @@ networkctl_SOURCES = \
 
 networkctl_LDADD = \
 	libsystemd-shared.la \
-	libsystemd-network.la
+	libsystemd-network-internal.la
 
 dist_bashcompletion_data += \
 	shell-completion/bash/networkctl
